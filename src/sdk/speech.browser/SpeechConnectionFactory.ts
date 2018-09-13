@@ -11,12 +11,16 @@ import {
     IConnectionFactory,
     RecognitionMode,
     RecognizerConfig,
+    SpeechEndpoint,
     SpeechResultFormat,
     WebsocketMessageFormatter,
 } from "../speech/Exports";
 
 const TestHooksParamName: string = "testhooks";
 const ConnectionIdHeader: string = "X-ConnectionId";
+const CID: string = "cid";
+const BingEndpoint: string = "wss://speech.platform.bing.com";
+const CRISEndpoint: string = "wss://westus.stt.speech.microsoft.com";
 
 export class SpeechConnectionFactory implements IConnectionFactory {
 
@@ -28,13 +32,13 @@ export class SpeechConnectionFactory implements IConnectionFactory {
         let endpoint = "";
         switch (config.RecognitionMode) {
             case RecognitionMode.Conversation:
-                endpoint = this.Host + this.ConversationRelativeUri;
+                endpoint = this.getHost(config.SpeechEndpoint) + this.ConversationRelativeUri;
                 break;
             case RecognitionMode.Dictation:
-                endpoint = this.Host + this.DictationRelativeUri;
+                endpoint = this.getHost(config.SpeechEndpoint) + this.DictationRelativeUri;
                 break;
             default:
-                endpoint = this.Host + this.InteractiveRelativeUri; // default is interactive
+                endpoint = this.getHost(config.SpeechEndpoint) + this.InteractiveRelativeUri; // default is interactive
                 break;
         }
 
@@ -47,6 +51,10 @@ export class SpeechConnectionFactory implements IConnectionFactory {
             queryParams[TestHooksParamName] = "1";
         }
 
+        if (config.SpeechEndpoint === SpeechEndpoint.CRIS) {
+            queryParams[CID] = config.Cid;
+        }
+
         const headers: IStringDictionary<string> = {};
         headers[authInfo.HeaderName] = authInfo.Token;
         headers[ConnectionIdHeader] = connectionId;
@@ -54,8 +62,8 @@ export class SpeechConnectionFactory implements IConnectionFactory {
         return new WebsocketConnection(endpoint, queryParams, headers, new WebsocketMessageFormatter(), connectionId);
     }
 
-    private get Host(): string {
-        return Storage.Local.GetOrAdd("Host", "wss://speech.platform.bing.com");
+    private getHost(endpoint: SpeechEndpoint): string {
+        return Storage.Local.GetOrAdd("Host", (endpoint === SpeechEndpoint.Bing) ? BingEndpoint : CRISEndpoint);
     }
 
     private get InteractiveRelativeUri(): string {

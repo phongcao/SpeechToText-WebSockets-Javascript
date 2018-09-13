@@ -154,7 +154,7 @@ export class FileAudioSource implements IAudioSource {
                         }
                     }
 
-                    stream.Write(reader.result);
+                    stream.Write(reader.result as ArrayBuffer);
                     lastWriteTimestamp = Date.now();
 
                     if (endOffset < this.file.size) {
@@ -170,9 +170,9 @@ export class FileAudioSource implements IAudioSource {
 
                 reader.onload = processNextChunk;
 
-                reader.onerror = (event: ErrorEvent) => {
-                    const errorMsg = `Error occurred while processing '${this.file.name}'. ${event.error}`;
-                    this.OnEvent(new AudioStreamNodeErrorEvent(this.id, audioNodeId, event.error));
+                reader.onerror = (event: ProgressEvent) => {
+                    const errorMsg = `Error occurred while processing '${this.file.name}'. ${event.type}`;
+                    this.OnEvent(new AudioStreamNodeErrorEvent(this.id, audioNodeId, event.type));
                     throw new Error(errorMsg);
                 };
 

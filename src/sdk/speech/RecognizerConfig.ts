@@ -10,23 +10,36 @@ export enum SpeechResultFormat {
     Detailed,
 }
 
+export enum SpeechEndpoint {
+    Bing,
+    CRIS,
+}
+
 export class RecognizerConfig {
     private recognitionMode: RecognitionMode = RecognitionMode.Interactive;
     private language: string;
     private format: SpeechResultFormat;
     private speechConfig: SpeechConfig;
     private recognitionActivityTimeout: number;
+    private cid: string;
+    private speechEndpoint: SpeechEndpoint;
 
     constructor(
         platformConfig: SpeechConfig,
         recognitionMode: RecognitionMode = RecognitionMode.Interactive,
         language: string = "en-us",
-        format: SpeechResultFormat = SpeechResultFormat.Simple) {
+        format: SpeechResultFormat = SpeechResultFormat.Simple,
+        cid: string = "undefined") {
         this.speechConfig = platformConfig ? platformConfig : new SpeechConfig(new Context(null, null));
         this.recognitionMode = recognitionMode;
         this.language = language;
         this.format = format;
         this.recognitionActivityTimeout = recognitionMode === RecognitionMode.Interactive ? 8000 : 25000;
+        this.speechEndpoint = SpeechEndpoint.Bing;
+        if (cid !== "undefined") {
+            this.cid = cid;
+            this.speechEndpoint = SpeechEndpoint.CRIS;
+        }
     }
 
     public get RecognitionMode(): RecognitionMode {
@@ -52,6 +65,14 @@ export class RecognizerConfig {
     public get IsContinuousRecognition(): boolean {
         return this.recognitionMode !== RecognitionMode.Interactive;
     }
+
+    public get Cid(): string {
+        return this.cid;
+    }
+
+    public get SpeechEndpoint(): SpeechEndpoint {
+        return this.speechEndpoint;
+    }
 }
 
 // tslint:disable-next-line:max-classes-per-file
@@ -64,16 +85,16 @@ export class SpeechConfig {
 
     public Serialize = (): string => {
         return JSON.stringify(this, (key: any, value: any): any => {
-        if (value && typeof value === "object") {
-            const replacement: any = {};
-            for (const k in value) {
-                if (Object.hasOwnProperty.call(value, k)) {
-                    replacement[k && k.charAt(0).toLowerCase() + k.substring(1)] = value[k];
+            if (value && typeof value === "object") {
+                const replacement: any = {};
+                for (const k in value) {
+                    if (Object.hasOwnProperty.call(value, k)) {
+                        replacement[k && k.charAt(0).toLowerCase() + k.substring(1)] = value[k];
+                    }
                 }
+                return replacement;
             }
-            return replacement;
-        }
-        return value;
+            return value;
         });
     }
 

@@ -1,7 +1,7 @@
 {
-  "name": "microsoft-speech-browser-sdk",
-  "version": "0.0.12",
-  "description": "Microsoft Speech SDK for browsers",
+  "name": "microsoft-speech-browser-sdk-cris",
+  "version": "0.0.15",
+  "description": "Microsoft Speech SDK for browsers (using CRIS endpoint)",
   "main": "distrib/Speech.Browser.Sdk.js",
   "types": "distrib/speech.browser.sdk.d.ts",
   "keywords": [
@@ -17,11 +17,11 @@
     "speechtotext"
   ],
   "bugs": {
-    "url": "https://github.com/Azure-Samples/SpeechToText-WebSockets-Javascript/issues"
+    "url": "https://github.com/phongcao/SpeechToText-WebSockets-Javascript/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Azure-Samples/SpeechToText-WebSockets-Javascript.git"
+    "url": "https://github.com/phongcao/SpeechToText-WebSockets-Javascript.git"
   },
   "author": "Microsoft",
   "license": "MIT",
@@ -36,7 +36,7 @@
     "gulp-typescript": "^3.2.3",
     "source-map-loader": "^0.2.3",
     "tslint": "^5.8.0",
-    "typescript": "^2.6.2",
+    "typescript": "3.0.3",
     "webpack-stream": "^4.0.0"
   },
   "scripts": {

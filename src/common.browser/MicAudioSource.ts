@@ -227,14 +227,14 @@ export class MicAudioSource implements IAudioSource {
         if ("close" in this.context) {
             this.context.close();
             this.context = null;
-        } else if (this.context.state === "running") {
+        } else if ((this.context as BaseAudioContext).state === "running") {
             // Suspend actually takes a callback, but analogous to the
             // resume method, it'll be only fired if suspend is called
             // in a direct response to a user action. The later is not always
             // the case, as TurnOff is also called, when we receive an
             // end-of-speech message from the service. So, doing a best effort
             // fire-and-forget here.
-            this.context.suspend();
+            (this.context as AudioContext).suspend();
         }
     }
 }
