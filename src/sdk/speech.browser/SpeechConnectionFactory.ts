@@ -20,7 +20,6 @@ const TestHooksParamName: string = "testhooks";
 const ConnectionIdHeader: string = "X-ConnectionId";
 const CID: string = "cid";
 const BingEndpoint: string = "wss://speech.platform.bing.com";
-const CRISEndpoint: string = "wss://westus.stt.speech.microsoft.com";
 
 export class SpeechConnectionFactory implements IConnectionFactory {
 
@@ -32,13 +31,13 @@ export class SpeechConnectionFactory implements IConnectionFactory {
         let endpoint = "";
         switch (config.RecognitionMode) {
             case RecognitionMode.Conversation:
-                endpoint = this.getHost(config.SpeechEndpoint) + this.ConversationRelativeUri;
+                endpoint = this.getHost(config.SpeechEndpoint, config.Region) + this.ConversationRelativeUri;
                 break;
             case RecognitionMode.Dictation:
-                endpoint = this.getHost(config.SpeechEndpoint) + this.DictationRelativeUri;
+                endpoint = this.getHost(config.SpeechEndpoint, config.Region) + this.DictationRelativeUri;
                 break;
             default:
-                endpoint = this.getHost(config.SpeechEndpoint) + this.InteractiveRelativeUri; // default is interactive
+                endpoint = this.getHost(config.SpeechEndpoint, config.Region) + this.InteractiveRelativeUri; // default is interactive
                 break;
         }
 
@@ -62,8 +61,8 @@ export class SpeechConnectionFactory implements IConnectionFactory {
         return new WebsocketConnection(endpoint, queryParams, headers, new WebsocketMessageFormatter(), connectionId);
     }
 
-    private getHost(endpoint: SpeechEndpoint): string {
-        return Storage.Local.GetOrAdd("Host", (endpoint === SpeechEndpoint.Bing) ? BingEndpoint : CRISEndpoint);
+    private getHost(endpoint: SpeechEndpoint, region: string): string {
+        return Storage.Local.GetOrAdd("Host", (endpoint === SpeechEndpoint.Bing) ? BingEndpoint : "wss://" + region + ".stt.speech.microsoft.com");
     }
 
     private get InteractiveRelativeUri(): string {

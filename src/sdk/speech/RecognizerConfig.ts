@@ -22,6 +22,7 @@ export class RecognizerConfig {
     private speechConfig: SpeechConfig;
     private recognitionActivityTimeout: number;
     private cid: string;
+    private region: string;
     private speechEndpoint: SpeechEndpoint;
 
     constructor(
@@ -29,7 +30,8 @@ export class RecognizerConfig {
         recognitionMode: RecognitionMode = RecognitionMode.Interactive,
         language: string = "en-us",
         format: SpeechResultFormat = SpeechResultFormat.Simple,
-        cid: string = "undefined") {
+        cid: string = "undefined",
+        region: string = "westus") {
         this.speechConfig = platformConfig ? platformConfig : new SpeechConfig(new Context(null, null));
         this.recognitionMode = recognitionMode;
         this.language = language;
@@ -38,6 +40,7 @@ export class RecognizerConfig {
         this.speechEndpoint = SpeechEndpoint.Bing;
         if (cid !== "undefined") {
             this.cid = cid;
+            this.region = region;
             this.speechEndpoint = SpeechEndpoint.CRIS;
         }
     }
@@ -68,6 +71,10 @@ export class RecognizerConfig {
 
     public get Cid(): string {
         return this.cid;
+    }
+
+    public get Region(): string {
+        return this.region;
     }
 
     public get SpeechEndpoint(): SpeechEndpoint {
