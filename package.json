@@ -1,6 +1,6 @@
 {
   "name": "microsoft-speech-browser-sdk-cris",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Microsoft Speech SDK for browsers (using CRIS endpoint)",
   "main": "distrib/Speech.Browser.Sdk.js",
   "types": "distrib/speech.browser.sdk.d.ts",
