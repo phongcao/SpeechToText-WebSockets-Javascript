@@ -12,7 +12,7 @@ export class Timer implements ITimer {
         if (this.timerId) {
             this.stop();
         }
-        this.timerId = setTimeout(this.successCallback, this.delayInMillisec, params);
+        this.timerId = window.setTimeout(this.successCallback, this.delayInMillisec, params);
     }
 
     public stop = (): void => {

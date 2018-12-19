@@ -1,6 +1,6 @@
 {
   "name": "microsoft-speech-browser-sdk-cris",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "description": "Microsoft Speech SDK for browsers (using CRIS endpoint)",
   "main": "distrib/Speech.Browser.Sdk.js",
   "types": "distrib/speech.browser.sdk.d.ts",
@@ -35,8 +35,8 @@
     "gulp-tslint": "^8.0.0",
     "gulp-typescript": "^3.2.3",
     "source-map-loader": "^0.2.3",
-    "tslint": "^5.8.0",
-    "typescript": "3.0.3",
+    "tslint": "5.11.0",
+    "typescript": "3.1.1",
     "webpack-stream": "^4.0.0"
   },
   "scripts": {
